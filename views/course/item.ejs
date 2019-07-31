@@ -4,24 +4,24 @@
 <body>
   <%- include('../partials/nav') %>
   <div id="content-indi">
-    <div class="banner--diagonal" style="background-image: url('https://d33wubrfki0l68.cloudfront.net/239d27a86bf0046263f33b8218da4885861195e0/1fa56/img/js/js.png')"></div>
+    <div class="banner--diagonal" style="background-image: url('<%= course.urlEmbed %>')"></div>
     <div class="container">
       <div class="row">
         <div class="col s8">
           <div class="content-indi__title">
-            <span>ultimate guide Javscript 101</span>
+            <span><%= course.courseName %></span>
           </div>
           <div class="content-indi__image">
-            <img src="https://d33wubrfki0l68.cloudfront.net/239d27a86bf0046263f33b8218da4885861195e0/1fa56/img/js/js.png">
+            <img src="<%= course.urlEmbed %>">
           </div>
           <div class="content-indi__description">
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nobis ea voluptates harum debitis! Asperiores officiis doloremque modi ipsa minima repellat? Sapiente voluptates vel eius explicabo et necessitatibus animi culpa ducimus! Lorem ipsum dolor sit amet consectetur adipisicing elit. Iste, minus. At odio adipisci excepturi eveniet. Officiis sed totam qui omnis nisi sequi! Unde aspernatur libero vel aliquid, nostrum odio praesentium.</p>
+            <p><%= course.description %></p>
           </div>
         </div>
         <div class="col s4">
           <div class="content-indi__price">
             <span>
-              Rp. 150,000
+              <%= formatUang(course.price) %>
             </span>
           </div>
           <div class="content-indi__action">
@@ -33,24 +33,17 @@
               <h4>Preview</h4>
             </div>
             <div class="content-indi__video-list--container">
-              <a href="#" class="video-list">
-                <div class="video-list--left">
-                  <div class="video-list__number">1</div>
-                </div>
-                <div class="video-list--right">
-                  <div class="video-list__title">Introduction of Javascript</div>
-                  <div class="video-list__duration">02:30</div>
-                </div>
-              </a>
-              <a href="#" class="video-list">
-                <div class="video-list--left">
-                  <div class="video-list__number">1</div>
-                </div>
-                <div class="video-list--right">
-                  <div class="video-list__title">Introduction of Javascript</div>
-                  <div class="video-list__duration">02:30</div>
-                </div>
-              </a>
+                <% course.Videos.forEach((el,idx) => { %> 
+                    <a href="/course/<%= course.id %>/video/<%= el.id %>" class="video-list">
+                        <div class="video-list--left">
+                            <div class="video-list__number"><%= el.order %></div>
+                        </div>
+                        <div class="video-list--right">
+                            <div class="video-list__title"><%= el.name %></div>
+                            <!-- <div class="video-list__duration">02:30</div> -->
+                        </div>
+                    </a>
+                <% }) %>
             </div>
           </div>
         </div>
