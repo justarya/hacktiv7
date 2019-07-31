@@ -89,13 +89,13 @@ class CourseController {
     }
 }
 
-// CourseController.create({
-//     name: 'Ternak Ayam Kampung',
-//     description: 'Animal',
-//     price: 14000000,
-//     video: 'https://www.youtube.com/watch?v=d8b4PrCK3Kg',
-//     exp: 30
-// })
+CourseController.create({
+    name: 'Ternak Ayam Kampung',
+    description: 'Animal',
+    price: 14000000,
+    video: 'https://www.youtube.com/watch?v=d8b4PrCK3Kg',
+    exp: 30
+})
 
 // CourseController.update({
 //     field: "description",
