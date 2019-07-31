@@ -2,7 +2,8 @@
 module.exports = (sequelize, DataTypes) => {
     const generateHASH = require('../helper/HASH')
     const Model = sequelize.Sequelize.Model
-    class User extends Model {}
+    class User extends Model {
+    }
     User.init({
         username: {
             type: DataTypes.STRING,
@@ -64,6 +65,7 @@ module.exports = (sequelize, DataTypes) => {
     })
   User.associate = function(models) {
     // associations can be defined here
+        User.hasMany(models.UserCourse)
   };
   return User;
 };

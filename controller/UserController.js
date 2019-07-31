@@ -73,3 +73,5 @@ class UserController {
 // })
 
 UserController.findOne()
+
+module.exports = UserController
