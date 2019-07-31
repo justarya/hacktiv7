@@ -2,6 +2,9 @@ const Course = require('../models').Course
 const EXCLUDE = ['createdAt','updatedAt'];
 class CourseController {
 
+    static loadCourse(req,res){
+        
+    }
     // CREATE COURSE
     static create(obj) {
         Course.create({
