@@ -2,8 +2,23 @@ const Course = require('../models').Course
 const EXCLUDE = ['createdAt','updatedAt'];
 class CourseController {
 
+    static loadIndex(req,res){
+        Course.findAll()
+            .then((data) => {
+                res.render('./course',data);
+            })
+    }
+
     static loadCourse(req,res){
-        
+        Course.findOne({
+            where:{
+                id: req.params.id
+            },
+            exclude: EXCLUDE
+        })
+        .then(data => {
+            res.render(data);
+        })
     }
     // CREATE COURSE
     static create(obj) {
