@@ -1,0 +1,17 @@
+{
+  "name": "pairproject",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "moment": "^2.24.0",
+    "nexmo": "^2.4.1",
+    "pg": "^7.12.0",
+    "sequelize": "^5.11.0"
+  }
+}
