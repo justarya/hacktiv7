@@ -1,5 +1,5 @@
 const User = require('../models').User
-
+const EXCLUDE = ['createdAt','updatedAt','password','salt']; //FOR EXCLUDE PROPERTY
 class UserController {
 
     //CREATE USER
@@ -29,17 +29,41 @@ class UserController {
             console.log(updated)
         })
         .catch(err => {
-            console.log(err)
+            throw err;
         })
     }
 
-    // static delete() {
-    //     User.destroy({
-    //         where: {
-    //             id: 1
-    //         }
-    //     })
-    // }
+    static findAll() {
+        User.findAll({
+            attributes: {
+                exclude: EXCLUDE
+            }
+        })
+        .then(users => {
+            let arrayOfUsers = users.map((el) => { return el.dataValues}); //OUTPUT
+        })
+        .catch(err => {
+            throw err;
+        })
+    }
+
+    static findOne() {
+        User.findOne({
+            where: {
+                id: 1
+            },
+            attributes: {
+                exclude: EXCLUDE
+            }
+        })
+        .then(found => {
+            let userFound = found.dataValues;
+        })
+        .catch(err => {
+            throw err;
+        })
+    }
+
 }
 
 // UserController.create({
@@ -48,4 +72,4 @@ class UserController {
 //     email: 'arya1@gmail.com'
 // })
 
-UserController.update()
+UserController.findOne()
