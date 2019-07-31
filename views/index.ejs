@@ -1,12 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Document</title>
-</head>
+<%- include('./partials/head') %>
 <body>
-  
+  <%- include('./partials/nav-home') %>
+  <div class="jumbotron">
+    <div class="container">
+      <div class="jumbotron__title">
+        <h1>Hacktiv7</h1>
+      </div>
+      <div class="jumbotron__description">
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugiat consectetur nobis quae obcaecati eius expedita totam, sed quia voluptatem vero blanditiis voluptate, consequuntur libero provident autem. Quibusdam recusandae atque sint.</p>
+      </div>
+      <div class="action">
+        <a href="login" class="waves-effect waves-light btn indigo white-text">Login</a>
+        <a href="register" class="waves-effect waves-light btn indigo white-text">Register</a>
+      </div>
+    </div>
+  </div>
+  <%- include('./partials/footer') %>
 </body>
 </html>
