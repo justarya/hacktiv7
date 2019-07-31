@@ -1,73 +1,54 @@
 const Course = require('../models').Course
+const User = require('../models').User
 const EXCLUDE = ['createdAt','updatedAt'];
+const UserCourse = require('../models').UserCourse
+const moment = require('moment')
+const Video = require('../models').Video
 class CourseController {
 
-    static loadIndex(req,res){
-        Course.findAll()
-            .then((data) => {
-                res.render('./course',data);
-            })
+    //VIEW ALL COURSE// TECHNOLOGY
+    static loadIndex(){
+        Course.findAll({
+            include:[
+                {model: Video, attributes: {exclude: EXCLUDE}}
+            ]
+        })
+        .then((data) => {
+            let arrayOfcourse = data.map((el) => { return el.dataValues});
+            console.log(arrayOfcourse)
+            // res.send('./course',arrayOfcourse);
+        })
     }
 
-    static loadCourse(req,res){
+    //VIEW ONE OF COURSE// TECHNOLOGYJS
+    static loadCourse(){
         Course.findOne({
             where:{
-                id: req.params.id
+                id: 1
             },
-            exclude: EXCLUDE
+            include: [{model: Video, attributes: {exclude: EXCLUDE}}],
+            attributes: {
+                exclude: EXCLUDE
+            }
         })
         .then(data => {
-            res.render(data);
+            let course = data.dataValues;
+            course.Videos = course.Videos.map((el) => { return el.dataValues})
+            console.log(course)
         })
     }
+
     // CREATE COURSE
     static create(obj) {
         Course.create({
             courseName: obj.name,
             description: obj.description,
             price: obj.price,
-            urlVideo: obj.video,
+            urlEmbed: obj.video,
             durationExpired: obj.exp
         })
         .then(created => {
             console.log(created)
-        })
-        .catch(err => {
-            throw err.message;
-        })
-    }
-
-    // READ ALL COURSE
-    static findAll(){
-        Course.findAll({
-            attributes: {
-                exclude: EXCLUDE
-            }
-        })
-        .then(courses => {
-            courses.forEach((el) => {
-                el.dataValues.price = el.priceFormat;
-            })
-            const arrayOfCourses = courses.map((el) => { return el.dataValues}) //OUTPUT
-        })
-        .catch(err => {
-            throw err.message;
-        })
-    }
-
-    // FIND ONE OF COURSE BY "ID"
-    static findOne(id) {
-        Course.findOne({
-            where: {
-                id: id
-            },
-            attributes: {
-                exclude: EXCLUDE
-            }
-        })
-        .then(course => {
-            course.dataValues.price = course.priceFormat;
-            const useData = course.dataValues; //OUTPUT
         })
         .catch(err => {
             throw err.message;
@@ -89,28 +70,67 @@ class CourseController {
         })
     }
 
-    //UPDATE COURSE BY ID
-    static update(obj) {
-        Course.update({
-            [obj.field]: obj.value
-        }, {
+    static cutBalance() {
+        let obj = {}
+        Course.findOne({
             where: {
-                id: obj.id
+                id: 3 //COURSE ID
+            },
+            attributes: {
+                exclude: EXCLUDE
             }
         })
-        .then(updated => {
-            console.log(updated)
+        .then(result => {
+            obj.coursePrice = result.dataValues.price
+            obj.courseLength = result.dataValues.durationExpired
+            return User.findOne({
+                where:{
+                    id: 2 //USER ID
+                },
+                attributes: {
+                    exclude: EXCLUDE
+                }
+            })
+        })
+        .then(findUser => {
+            let userBalance = findUser.dataValues.balance;
+            if (obj.coursePrice <= userBalance) {
+                User.update({
+                    balance: userBalance - obj.coursePrice
+                }, {
+                    where: {
+                        id: 2 //id USER
+                    }
+                })
+                .then(updated => {
+                    return UserCourse.create({
+                        UserId: 2,
+                        CourseId: 3,
+                        startTime: moment().format(),
+                        expiredTime: moment().add(obj.courseLength,'days').format()
+                    })
+                })
+                .then(updated => {
+                    console.log(updated)
+                })
+                .catch(err => {
+                    console.log(err)
+                })
+            }
+            else {
+                console.log("KURANG")
+            }
         })
         .catch(err => {
-            console.log(err)
+            throw err;
         })
     }
 }
 
 // CourseController.create({
-//     name: 'Ternak Ayam Kampung',
-//     description: 'Animal',
-//     price: 14000000,
+//     name: 'Ruby Course',
+//     description: 'Ruby',
+//     price: 20000,
 //     video: 'https://www.youtube.com/watch?v=d8b4PrCK3Kg',
 //     exp: 30
 // })
@@ -121,7 +141,9 @@ class CourseController {
 //     id: 2
 // })
 
-// CourseController.delete(3)
-// CourseController.findAll()
+CourseController.loadCourse()
+// CourseController.loadIndex()
 
-// CourseController.findOne(1)
+// CourseController.cutBalance()
+
+module.exports = CourseController
