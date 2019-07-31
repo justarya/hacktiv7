@@ -5,7 +5,8 @@ module.exports = (sequelize, DataTypes) => {
     Video.init({
         CourseId: DataTypes.INTEGER,
         urlVideo: DataTypes.TEXT,
-        name: DataTypes.STRING
+        name: DataTypes.STRING,
+        order: DataTypes.STRING
     }, {
         sequelize
     })

@@ -72,6 +72,6 @@ class UserController {
 //     email: 'arya1@gmail.com'
 // })
 
-UserController.findOne()
+// UserController.findOne()
 
 module.exports = UserController

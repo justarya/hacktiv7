@@ -6,7 +6,7 @@ const moment = require('moment')
 const Video = require('../models').Video
 class CourseController {
 
-    //VIEW ALL COURSE
+    //VIEW ALL COURSE// TECHNOLOGY
     static loadIndex(){
         Course.findAll({
             include:[
@@ -19,17 +19,22 @@ class CourseController {
             // res.send('./course',arrayOfcourse);
         })
     }
-    //VIEW ONE OF COURSE
+
+    //VIEW ONE OF COURSE// TECHNOLOGYJS
     static loadCourse(){
         Course.findOne({
             where:{
-                id: req.params.id
+                id: 1
             },
-            exclude: EXCLUDE
+            include: [{model: Video, attributes: {exclude: EXCLUDE}}],
+            attributes: {
+                exclude: EXCLUDE
+            }
         })
         .then(data => {
             let course = data.dataValues;
-            res.send(course);
+            course.Videos = course.Videos.map((el) => { return el.dataValues})
+            console.log(course)
         })
     }
 
@@ -44,26 +49,6 @@ class CourseController {
         })
         .then(created => {
             console.log(created)
-        })
-        .catch(err => {
-            throw err.message;
-        })
-    }
-
-
-    // FIND ONE OF COURSE BY "ID"
-    static findOne(id) {
-        Course.findOne({
-            where: {
-                id: id
-            },
-            attributes: {
-                exclude: EXCLUDE
-            }
-        })
-        .then(course => {
-            course.dataValues.price = course.priceFormat;
-            const useData = course.dataValues; //OUTPUT
         })
         .catch(err => {
             throw err.message;
@@ -156,8 +141,8 @@ class CourseController {
 //     id: 2
 // })
 
-// CourseController.delete(3)
-CourseController.loadIndex()
+CourseController.loadCourse()
+// CourseController.loadIndex()
 
 // CourseController.cutBalance()
 

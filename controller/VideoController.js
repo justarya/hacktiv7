@@ -28,5 +28,7 @@ class VideoController {
         })
     }
 }
+
 // VideoController.loadALl()
 // VideoController.create()
+module.exports = VideoController
