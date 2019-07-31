@@ -30,6 +30,9 @@
 }
 
 /* CONTENT */
+#content{
+  min-height: 80vh;
+}
 .content--item{
   display: block;
   color: black;
@@ -86,6 +89,7 @@
   margin-top: 10px; 
 }
 .banner--diagonal{
+  background-size: cover;
   background-color: #3f51b5;
   clip-path: polygon(0 0, 100% 0%, 100% 52%, 0% 100%);
   height: 260px;
@@ -104,13 +108,44 @@
   color: black;
   font-size: 40px;
 }
+.content-indi__image img{
+  width: 100%;
+}
 .content-indi__price{
   font-size: 40px;
   margin: 20px;
-  
 }
 .content-indi__action button{
   width: 100%;
+}
+
+/* LIST */
+.content-indi__video-list--container{
+  margin-top:30px;
+  border-radius: 10px;
+  border: 2px solid #FFA00F;
+  max-height: 300px;
+  overflow: hidden;
+}
+.video-list{
+  padding: 10px;
+  background-color: #f0f0f0;
+  display: flex;
+  color: black;
+}
+.video-list:hover{
+  background-color: #cccccc;
+}
+.video-list--left{
+  width: 10%;
+  float: left;
+}
+.video-list--right{
+  width: 90%;
+  float: left;
+}
+.video-list__number,.video-list__title{
+  font-size: 18px;
 }
 
 /* FOOOTER */
