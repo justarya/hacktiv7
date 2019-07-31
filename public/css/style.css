@@ -25,6 +25,9 @@
 .jumbotron--mini .jumbotron__title{
   margin-top: 20px;
 }
+.jumbotron__title{
+  color: white;
+}
 
 /* CONTENT */
 .content--item{
