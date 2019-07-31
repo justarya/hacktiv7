@@ -1,6 +1,5 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
-    const generateFormat = require('../helper/formatUang');
     const Model = sequelize.Sequelize.Model
     class Course extends Model {
         get priceFormat() {
@@ -11,13 +10,15 @@ module.exports = (sequelize, DataTypes) => {
         courseName: DataTypes.STRING,
         description: DataTypes.STRING,
         price: DataTypes.INTEGER,
-        urlVideo: DataTypes.STRING,
+        urlEmbed: DataTypes.STRING,
         durationExpired: DataTypes.INTEGER
     }, {
         sequelize
     })
   Course.associate = function(models) {
     // associations can be defined here
+    Course.hasMany(models.UserCourse)
+    Course.hasMany(models.Video)
   };
   return Course;
 };
