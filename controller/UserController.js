@@ -91,8 +91,10 @@ class UserController {
         let obj = {
             // email: req.body.email
         }
-        if(!req.body.password){
-            obj.password = req.body.password;
+        if(req.body.password){
+            let salt = bcrypt.genSaltSync(10);
+            let hash = bcrypt.hashSync(req.body.password, salt);
+            obj.password = hash;
         }
         User.update(obj,{
             where: {

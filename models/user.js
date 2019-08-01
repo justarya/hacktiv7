@@ -3,6 +3,7 @@ module.exports = (sequelize, DataTypes) => {
     const generateHASH = require('../helper/HASH')
     const Model = sequelize.Sequelize.Model
     const Op = sequelize.Sequelize.Op
+    const bcrypt = require('bcryptjs');
     class User extends Model {
     }
     User.init({
@@ -57,10 +58,12 @@ module.exports = (sequelize, DataTypes) => {
         sequelize
     })
     User.addHook('beforeCreate', 'hashPassword', (user, options) => {
-        const bcrypt = require('bcryptjs');
         let salt = bcrypt.genSaltSync(10);
         let hash = bcrypt.hashSync(user.password, salt);
         user.password = hash;
+    })
+    User.addHook('beforeUpdate', 'hashPassword', (user, options) => {
+
     })
     User.addHook('beforeCreate', 'generateBalance' , (user, options) => {
         user.balance = 100000
