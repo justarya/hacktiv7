@@ -16,7 +16,6 @@ class CourseController {
         })
         .then((data) => {
             let arrayOfcourse = data.map((el) => { return el.dataValues});
-            console.log(arrayOfcourse)
             res.render('./course',{courses:arrayOfcourse,formatUang});
         })
     }
@@ -174,7 +173,7 @@ class CourseController {
                     res.redirect(`/course/${req.params.id}`)
                 })
                 .catch(err => {
-                    console.log(err)
+                    throw err;
                 })
             }
             else {

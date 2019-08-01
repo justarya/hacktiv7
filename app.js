@@ -4,7 +4,7 @@ const session = require('express-session');
 const notification = require('./helper/automaticsendmail')
 
 const app = express();
-const port = 3300;
+const port = process.env.PORT || 4000;
 
 const UserController = require('./controller/UserController')
 const rejectAuth = require('./middleware/rejectAuth');
