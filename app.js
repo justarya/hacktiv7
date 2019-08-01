@@ -1,21 +1,37 @@
 const express = require('express');
-const app = express();
 const routes = require('./routes');
-const port = 3100;
+const session = require('express-session');
+const notification = require('./helper/automaticsendmail')
 
-// controller
+const app = express();
+const port = 3200;
+
+const UserController = require('./controller/UserController')
+const rejectAuth = require('./middleware/rejectAuth');
+
+
+app.use(session({
+  secret: 'inisaiganudemy',
+  resave: false,
+  saveUninitialized: true
+}))
+
+//node -cron
+notification()
+
 app.set('view engine','ejs');
 app.use(express.urlencoded({extended:false}));
 app.use(express.static('public'));
 
+// controller
+app.get('/', rejectAuth, (req,res) => res.render('index'));
+app.get('/login', rejectAuth, (req,res) => res.render('login'));
+app.post('/login', rejectAuth, UserController.login);
 
+app.get('/register',rejectAuth, (req,res) => res.render('register'));
+app.post('/register', rejectAuth, UserController.register);
 
-app.get('/', (req,res) => res.render('index'));
-app.get('/login', (req,res) => res.render('login'));
-// app.post('/login', user.login);
-
-app.get('/register',(req,res) => res.render('register'));
-// app.post('/register', user.register);
+app.get('/logout', UserController.logout)
 
 // app.use('/user', routes.user);
 app.use('/course', routes.course);

@@ -43,7 +43,6 @@ class CourseController {
         .then(data => {
             let course = data.dataValues;
             course.Videos = course.Videos.map((el) => { return el.dataValues})
-            console.log(course)
             res.render('./course/item', {course,formatUang})
         })
     }
@@ -58,13 +57,15 @@ class CourseController {
             include: [
                 {model: Video,attributes:{exclude: EXCLUDE}}
             ],
-            exclude: EXCLUDE
+            attributes: {
+                exclude: EXCLUDE
+            },
+            order: [[{model: Video},'order', 'ASC']]
         })
         .then(result => {
             let course = result.dataValues
             let video = result.Videos.find((el) => { return el.id == req.params.idv})
             course.Videos = course.Videos.map((el) => { return el.dataValues})
-            console.log(video.urlVideo)
             res.render('./course/video', {course,video})
         })
     }
@@ -96,7 +97,7 @@ class CourseController {
             }
         })
         .then(deleted => {
-            console.log(deleted)
+
         })
         .catch(err => {
             throw err.message;
@@ -107,7 +108,7 @@ class CourseController {
         let obj = {}
         Course.findOne({
             where: {
-                id: 1 //COURSE ID
+                id: req.params.id//COURSE ID
             },
             attributes: {
                 exclude: EXCLUDE
@@ -118,7 +119,7 @@ class CourseController {
             obj.courseLength = result.dataValues.durationExpired
             return User.findOne({
                 where:{
-                    id: 2 //USER ID
+                    id: req.session.idUser//USER ID
                 },
                 attributes: {
                     exclude: EXCLUDE
@@ -132,19 +133,19 @@ class CourseController {
                     balance: userBalance - obj.coursePrice
                 }, {
                     where: {
-                        id: 2 //id USER
+                        id: req.params.id //id USER
                     }
                 })
                 .then(updated => {
                     return UserCourse.create({
-                        UserId: 2,
-                        CourseId: 3,
+                        UserId: req.session.idUser,
+                        CourseId: req.params.id,
                         startTime: moment().format(),
                         expiredTime: moment().add(obj.courseLength,'days').format()
                     })
                 })
                 .then(updated => {
-                    console.log(updated)
+                    res.render('updated')
                 })
                 .catch(err => {
                     console.log(err)
@@ -159,24 +160,5 @@ class CourseController {
         })
     }
 }
-
-// CourseController.create({
-//     name: 'Ruby Course',
-//     description: 'Ruby',
-//     price: 20000,
-//     video: 'https://www.youtube.com/watch?v=d8b4PrCK3Kg',
-//     exp: 30
-// })
-
-// CourseController.update({
-//     field: "description",
-//     value: "Programming",
-//     id: 2
-// })
-
-// CourseController.loadCourse()
-// CourseController.loadIndex()
-
-// CourseController.cutBalance()
 
 module.exports = CourseController

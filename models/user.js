@@ -56,9 +56,10 @@ module.exports = (sequelize, DataTypes) => {
         sequelize
     })
     User.addHook('beforeCreate', 'hashPassword', (user, options) => {
-        let generate = generateHASH(user.password);
-        user.salt = generate.salt;
-        user.password = generate.password;
+        const bcrypt = require('bcryptjs');
+        let salt = bcrypt.genSaltSync(10);
+        let hash = bcrypt.hashSync(user.password, salt);
+        user.password = hash;
     })
     User.addHook('beforeCreate', 'generateBalance' , (user, options) => {
         user.balance = 10000
