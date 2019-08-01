@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('../partials/head') %>
+<body>
+  <%- include('../partials/nav') %>
+  <div class="jumbotron--mini">
+    <div class="container">
+      <div class="jumbotron__title">
+        <h1>Profile | <%= user.username %></h1>
+      </div>
+    </div>
+  </div>
+  <div id="content">
+    <div class="container">
+      <div class="content__group">
+        <div class="row">
+        <%- include('../partials/message') %>
+        <form action="" method="post">
+            <div class="input-field">
+              <input placeholder="Username" id="username" type="text" name="username" class="" value="<%= user.username %>" disabled>
+              <label for="username">Username</label>
+            </div>
+            <div class="input-field">
+              <input placeholder="Password" id="password" type="password" name="password" class="" value="">
+              <label for="password">Password</label>
+            </div>
+            <div class="input-field">
+              <input placeholder="Email" id="email" type="email" name="email" class="" value="<%= user.email %>" disabled>
+              <label for="email">Email</label>
+            </div>
+            <button class="btn waves-effect waves-light" type="submit" name="action">Save</button>
+          </form>
+        </div>
+      </div>
+      <div class="content__group voucher">
+        <div class="title">
+          <h2>Add Voucher</h2>
+        </div>
+        <form action="/user/validateVoucher" method="post">
+          <div class="row">
+            <div class="input-field col s6">
+              <input type="text" class="validate" value="<%= user.balance %>" disabled>
+              <label for="username">Balance</label>
+            </div>
+            <div class="input-field col s6">
+              <input type="text" name="code" class="" value="">
+              <label for="username">Voucher</label>
+            </div>
+            <button class="btn waves-effect waves-light" type="submit" name="action">Add Voucher</button>
+          </div>
+
+        </form>
+      </div>
+      <div class="content__group">
+        <div class="title">
+          <h2>My Course</h2>
+        </div>
+        <div class="row">
+          <table>
+            <thead>
+              <tr>
+                <th>Course Name</th>
+                <th>Starting Time</th>
+                <th>Expired</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% user.UserCourses.forEach((el) => { %>
+                <tr>
+                  <td><%= el.Course.courseName%></td>
+                  <td><%= moment(el.startTime).fromNow() %></td>
+                  <td><%= moment(el.expiredTime).fromNow() %></td>
+                </tr>
+              <% }) %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <%- include('../partials/footer') %>
+</body>
+</html>

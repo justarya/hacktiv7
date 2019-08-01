@@ -3,12 +3,14 @@
 <%- include('./partials/head') %>
 <body>
   <%- include('./partials/nav-auth') %>
+  
   <div id="register" class="auth-content">
     <div class="container">
       <div class="form">
         <div class="title">
           <span>Register</span>
         </div>
+        <%- include('./partials/message') %>
         <form action="" method="post">
           <div class="input-field">
             <input type="text" name="email" placeholder="Email" id="email">

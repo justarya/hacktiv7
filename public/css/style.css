@@ -30,6 +30,7 @@
 }
 /* CONTENT */
 #content{
+  padding-top: 30px;
   min-height: 80vh;
 }
 .content--item{

@@ -25,15 +25,15 @@ app.use(express.static('public'));
 
 // controller
 app.get('/', rejectAuth, (req,res) => res.render('index'));
-app.get('/login', rejectAuth, (req,res) => res.render('login'));
+app.get('/login', rejectAuth, UserController.loadLogin);
 app.post('/login', rejectAuth, UserController.login);
 
-app.get('/register',rejectAuth, (req,res) => res.render('register'));
+app.get('/register',rejectAuth, UserController.loadRegister);
 app.post('/register', rejectAuth, UserController.register);
 
 app.get('/logout', UserController.logout)
 
-// app.use('/user', routes.user);
+app.use('/user', routes.user);
 app.use('/course', routes.course);
 
 app.listen(port, () => console.log(`Successfully Connected to Port ${port}`))

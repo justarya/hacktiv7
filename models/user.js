@@ -2,6 +2,7 @@
 module.exports = (sequelize, DataTypes) => {
     const generateHASH = require('../helper/HASH')
     const Model = sequelize.Sequelize.Model
+    const Op = sequelize.Sequelize.Op
     class User extends Model {
     }
     User.init({
@@ -62,7 +63,7 @@ module.exports = (sequelize, DataTypes) => {
         user.password = hash;
     })
     User.addHook('beforeCreate', 'generateBalance' , (user, options) => {
-        user.balance = 10000
+        user.balance = 100000
     })
   User.associate = function(models) {
     // associations can be defined here
