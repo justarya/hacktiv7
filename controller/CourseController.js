@@ -27,7 +27,7 @@ class CourseController {
             where:{
                 id: req.params.id
             },
-            include: [{model: Video, attributes: {exclude: EXCLUDE,order: ['order', 'ASC']}}],
+            include: [{model: Video, attributes: {exclude: EXCLUDE,order: [['order', 'ASC']]}}],
             attributes: {
                 exclude: EXCLUDE
             }

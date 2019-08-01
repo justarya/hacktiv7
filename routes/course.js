@@ -1,8 +1,9 @@
 const routes = require('express').Router();
 const CourseController = require('../controller/CourseController');
+const auth = require('../middleware/auth')
 
-routes.get('/', CourseController.loadIndex);
-routes.get('/:id', CourseController.loadCourse);
-routes.get('/:idc/video/:idv', CourseController.loadVideo);
+routes.get('/', auth, CourseController.loadIndex);
+routes.get('/:id', auth, CourseController.loadCourse);
+routes.get('/:idc/video/:idv', auth, CourseController.loadVideo);
 
 module.exports = routes;
