@@ -104,7 +104,7 @@ class CourseController {
         })
     }
 
-    static cutBalance() {
+    static cutBalance(req, res) {
         let obj = {}
         Course.findOne({
             where: {
@@ -133,7 +133,7 @@ class CourseController {
                     balance: userBalance - obj.coursePrice
                 }, {
                     where: {
-                        id: req.params.id //id USER
+                        id: req.session.idUser //id USER
                     }
                 })
                 .then(updated => {
@@ -145,7 +145,8 @@ class CourseController {
                     })
                 })
                 .then(updated => {
-                    res.render('updated')
+                    console.log("HERE")
+                    res.send('updated')
                 })
                 .catch(err => {
                     console.log(err)
