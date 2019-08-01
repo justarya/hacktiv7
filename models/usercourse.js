@@ -9,6 +9,13 @@ module.exports = (sequelize, DataTypes) => {
         get expired () {
             return moment(new Date()).isSame(this.expiredTime)
         }
+
+        get info() {
+            return {
+                expiredTime: this.expiredTime,
+                courseName: this.Course
+            }
+        }
     }
     UserCourse.init({
         UserId: DataTypes.INTEGER,

@@ -27,14 +27,23 @@ class CourseController {
             where:{
                 id: req.params.id
             },
-            include: [{model: Video, attributes: {exclude: EXCLUDE,order: ['order', 'ASC']}}],
+            include: [
+                {
+                    model: Video, 
+                    attributes: {
+                        exclude: EXCLUDE
+                    }
+                }
+            ],
             attributes: {
                 exclude: EXCLUDE
-            }
+            },
+            order: [[{model: Video},'order', 'ASC']]
         })
         .then(data => {
             let course = data.dataValues;
             course.Videos = course.Videos.map((el) => { return el.dataValues})
+            console.log(course)
             res.render('./course/item', {course,formatUang})
         })
     }
@@ -98,7 +107,7 @@ class CourseController {
         let obj = {}
         Course.findOne({
             where: {
-                id: 3 //COURSE ID
+                id: 1 //COURSE ID
             },
             attributes: {
                 exclude: EXCLUDE

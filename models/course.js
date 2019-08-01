@@ -5,6 +5,9 @@ module.exports = (sequelize, DataTypes) => {
         get priceFormat() {
             return generateFormat(this.price)
         }
+        get courseName() {
+            return this.courseName
+        }
     }
     Course.init({
         courseName: DataTypes.STRING,
