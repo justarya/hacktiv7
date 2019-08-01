@@ -31,7 +31,9 @@ class VoucherController {
     .then((data) => {
       res.redirect('/user?success='+'voucher berhasil ditambahkan')
     })
-    .catch(err => res.send(err));
+    .catch(err => {
+      res.redirect('/user?error='+'Voucher tidak valid')
+    });
   }
 }
 
