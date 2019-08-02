@@ -1,8 +1,7 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
-    const generateHASH = require('../helper/HASH')
-    const Model = sequelize.Sequelize.Model
     const Op = sequelize.Sequelize.Op
+    const Model = sequelize.Sequelize.Model
     const bcrypt = require('bcryptjs');
     class User extends Model {
     }
@@ -13,7 +12,10 @@ module.exports = (sequelize, DataTypes) => {
                 isUnique: function(value) {
                     return User.findOne({
                         where: {
-                            username: value
+                            username: value,
+                            id: {
+                                [Op.ne]: this.id
+                            }
                         }
                     })
                     .then(result => {
@@ -39,7 +41,10 @@ module.exports = (sequelize, DataTypes) => {
                 isUnique: function(value) {
                     return User.findOne({
                         where: {
-                            email: value
+                            email: value,
+                            id: {
+                                [Op.ne] : this.id
+                            }
                         }
                     })
                     .then(result => {

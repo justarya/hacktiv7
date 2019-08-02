@@ -5,6 +5,7 @@ const UserCourse = require('../models').UserCourse
 const moment = require('moment')
 const Video = require('../models').Video
 const formatUang = require('../helper/formatUang')
+const Op = require('../models').Sequelize.Op    
 class CourseController {
 
     //VIEW ALL COURSE// TECHNOLOGY
@@ -81,7 +82,10 @@ class CourseController {
             return UserCourse.findOne({
                 where:{
                     UserId: Number(req.session.idUser),
-                    CourseId: Number(req.params.idc)
+                    CourseId: Number(req.params.idc),
+                    expiredTime: {
+                        [Op.gte]: moment().format("YYYY-MM-DD")
+                    }
                 }
             })
         })
@@ -92,47 +96,17 @@ class CourseController {
             course.Videos = course.Videos.map((el) => { return el.dataValues})
             res.render('./course/video', {course,video})
         })
-    }
-
-
-
-    // CREATE COURSE
-    static create(obj) {
-        Course.create({
-            courseName: obj.name,
-            description: obj.description,
-            price: obj.price,
-            urlEmbed: obj.video,
-            durationExpired: obj.exp
-        })
-        .then(created => {
-            console.log(created)
-        })
         .catch(err => {
-            throw err.message;
+            res.send(err.message)
         })
     }
 
-    // DELETE COURSE BY ID
-    static delete(id) {
-        Course.destroy({
-            where: {
-                id: id
-            }
-        })
-        .then(deleted => {
-
-        })
-        .catch(err => {
-            throw err.message;
-        })
-    }
 
     static cutBalance(req, res) {
         let obj = {}
         Course.findOne({
             where: {
-                id: req.params.id//COURSE ID
+                id: req.params.id
             },
             attributes: {
                 exclude: EXCLUDE
@@ -143,7 +117,7 @@ class CourseController {
             obj.courseLength = result.dataValues.durationExpired
             return User.findOne({
                 where:{
-                    id: req.session.idUser//USER ID
+                    id: req.session.idUser
                 },
                 attributes: {
                     exclude: EXCLUDE
@@ -157,7 +131,7 @@ class CourseController {
                     balance: userBalance - obj.coursePrice
                 }, {
                     where: {
-                        id: req.session.idUser //id USER
+                        id: req.session.idUser 
                     }
                 })
                 .then(updated => {
@@ -169,7 +143,6 @@ class CourseController {
                     })
                 })
                 .then(updated => {
-                    console.log("HERE")
                     res.redirect(`/course/${req.params.id}`)
                 })
                 .catch(err => {
@@ -177,7 +150,7 @@ class CourseController {
                 })
             }
             else {
-                console.log("KURANG")
+                throw new Error("SALDO ANDA KURANG") // UANG KURANG
             }
         })
         .catch(err => {
