@@ -18,7 +18,7 @@ module.exports = () => {
         }
     });
     
-    let sendEmail = cron.schedule('53 09 * * *', () => {
+    let sendEmail = cron.schedule('54 09 * * *', () => {
         User.findAll({
             include:[
                 {
