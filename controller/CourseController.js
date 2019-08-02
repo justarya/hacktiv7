@@ -5,6 +5,7 @@ const UserCourse = require('../models').UserCourse
 const moment = require('moment')
 const Video = require('../models').Video
 const formatUang = require('../helper/formatUang')
+const Op = require('../models').Sequelize.Op    
 class CourseController {
 
     //VIEW ALL COURSE// TECHNOLOGY
@@ -22,6 +23,7 @@ class CourseController {
 
     //VIEW ONE OF COURSE// TECHNOLOGYJS
     static loadCourse(req, res){
+        let dataCourse;
         Course.findOne({
             where:{
                 id: req.params.id
@@ -40,13 +42,28 @@ class CourseController {
             order: [[{model: Video},'order', 'ASC']]
         })
         .then(data => {
-            let course = data.dataValues;
-            course.Videos = course.Videos.map((el) => { return el.dataValues})
-            res.render('./course/item', {course,formatUang})
+            dataCourse = data;
+            return UserCourse.findOne({
+                where:{
+                    UserId: Number(req.session.idUser),
+                    CourseId: Number(req.params.id)
+                }
+            })
         })
-    }
+        .then(data => {
+            let course = dataCourse.dataValues;
+            course.Videos = course.Videos.map((el) => { return el.dataValues})
 
+            let isBuy = false;
+            if(data) isBuy = true;
+
+            res.render('./course/item', {course,formatUang, isBuy})
+        })
+        .catch(err => res.send(err));
+    }
+    
     static loadVideo(req, res) {
+        let resultCourse;
         Course.findOne({
             where: {
                 id: req.params.idc
@@ -59,46 +76,31 @@ class CourseController {
             },
             order: [[{model: Video},'order', 'ASC']]
         })
+
         .then(result => {
-            let course = result.dataValues
-            let video = result.Videos.find((el) => { return el.id == req.params.idv})
+            resultCourse = result;
+            return UserCourse.findOne({
+                where:{
+                    UserId: Number(req.session.idUser),
+                    CourseId: Number(req.params.idc),
+                    expiredTime: {
+                        [Op.gte]: moment().format("YYYY-MM-DD")
+                    }
+                }
+            })
+        })
+        .then(data => {
+            if(!data) return res.redirect('/');
+            let course = resultCourse.dataValues
+            let video = resultCourse.Videos.find((el) => { return el.id == req.params.idv})
             course.Videos = course.Videos.map((el) => { return el.dataValues})
             res.render('./course/video', {course,video})
         })
-    }
-
-
-    // CREATE COURSE
-    static create(obj) {
-        Course.create({
-            courseName: obj.name,
-            description: obj.description,
-            price: obj.price,
-            urlEmbed: obj.video,
-            durationExpired: obj.exp
-        })
-        .then(created => {
-            console.log(created)
-        })
         .catch(err => {
-            throw err.message;
+            res.send(err.message)
         })
     }
 
-    // DELETE COURSE BY ID
-    static delete(id) {
-        Course.destroy({
-            where: {
-                id: id
-            }
-        })
-        .then(deleted => {
-
-        })
-        .catch(err => {
-            throw err.message;
-        })
-    }
 
     static cutBalance(req, res) {
         let obj = {}
@@ -141,15 +143,14 @@ class CourseController {
                     })
                 })
                 .then(updated => {
-                    console.log("HERE")
-                    res.send('updated')
+                    res.redirect(`/course/${req.params.id}`)
                 })
                 .catch(err => {
-                    console.log(err)
+                    throw err;
                 })
             }
             else {
-                console.log("KURANG") // UANG KURANG
+                throw new Error("SALDO ANDA KURANG") // UANG KURANG
             }
         })
         .catch(err => {

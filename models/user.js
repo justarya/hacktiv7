@@ -2,6 +2,7 @@
 module.exports = (sequelize, DataTypes) => {
     const Op = sequelize.Sequelize.Op
     const Model = sequelize.Sequelize.Model
+    const bcrypt = require('bcryptjs');
     class User extends Model {
     }
     User.init({
@@ -60,6 +61,14 @@ module.exports = (sequelize, DataTypes) => {
         salt: DataTypes.STRING
     },{
         sequelize
+    })
+    User.addHook('beforeCreate', 'hashPassword', (user, options) => {
+        let salt = bcrypt.genSaltSync(10);
+        let hash = bcrypt.hashSync(user.password, salt);
+        user.password = hash;
+    })
+    User.addHook('beforeUpdate', 'hashPassword', (user, options) => {
+
     })
     User.addHook('beforeCreate', 'generateBalance' , (user, options) => {
         user.balance = 100000

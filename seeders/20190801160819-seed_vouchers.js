@@ -8,31 +8,28 @@ module.exports = {
 
       Example:
       */
-    return queryInterface.bulkInsert('Videos', [
+    return queryInterface.bulkInsert('Vouchers',[
       {
-        CourseId:4,
-        urlVideo:'https://www.youtube.com/embed/0p0JLFZj2C8',
-        name: 'Introduction',
-        order: 1,
+        code: 'hacktiv8',
+        status: true,
+        voucherValue: 80000,
         createdAt: new Date(),
         updatedAt: new Date()
       },{
-        CourseId:4,
-        urlVideo:'https://www.youtube.com/embed/GcFJjpMFJvI',
-        name: 'Immersive',
-        order: 2,
+        code: 'MAUBELAJAR',
+        status: true,
+        voucherValue: 100000,
         createdAt: new Date(),
         updatedAt: new Date()
       },{
-        CourseId:4,
-        urlVideo:'https://www.youtube.com/embed/GhQdlIFylQ8',
-        name: 'Final',
-        order: 3,
+        code: 'NGODINGKUY',
+        status: true,
+        voucherValue: 120000,
         createdAt: new Date(),
         updatedAt: new Date()
-      },
+      }
     ], {});
-    },
+  },
 
   down: (queryInterface, Sequelize) => {
     /*
@@ -41,6 +38,6 @@ module.exports = {
 
       Example:
       */
-     return queryInterface.bulkDelete('Videos', null, {});
+     return queryInterface.bulkDelete('Vouchers', null, {});
   }
 };

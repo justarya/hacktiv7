@@ -19,6 +19,7 @@
           </div>
         </div>
         <div class="col s4">
+          <% if(!isBuy) {%>
           <div class="content-indi__price">
             <span>
               <%= formatUang(course.price) %>
@@ -28,6 +29,7 @@
             <a href="/course/<%= course.id %>/buy" class="btn waves-effect waves-light btn-large amber black-text" type="submit" name="action">Buy
             </a>
           </div>
+          <% } %>
           <div class="content-indi__video-list">
             <div class="title">
               <h4>Preview</h4>

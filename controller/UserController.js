@@ -1,9 +1,24 @@
 const User = require('../models').User
+const UserCourse = require('../models').UserCourse
+const Course = require('../models').Course
 const EXCLUDE = ['createdAt','updatedAt','password','salt']; //FOR EXCLUDE PROPERTY
 const bcrypt = require('bcryptjs');
 const Voucher = require('../models').Voucher
+const moment = require('moment')
 
 class UserController {
+    static loadLogin(req,res){
+        res.render('login',{
+            error: req.query.error,
+            success: req.query.success
+        })
+    }
+    static loadRegister(req,res){
+        res.render('register',{
+            error: req.query.error,
+            success: req.query.success
+        })
+    }
     static register(req,res){
         User.create({
             username: req.body.username,
@@ -13,7 +28,7 @@ class UserController {
         .then(data => {
             res.redirect('/login?success=Successfully Register! Please Login');
         })
-        .catch(err => res.send(err.message))
+        .catch(err => res.redirect('/register?error='+err.message))
     }
     // LOGIN
     static login(req,res){
@@ -23,21 +38,24 @@ class UserController {
             }
         })
         .then(data => {
-            if(bcrypt.compareSync(req.body.password, data.password)){
-                req.session.username = req.body.username;
-                req.session.idUser = data.id;
-                req.session.isLogin = true;
-                res.redirect('/course');
+            if(data){
+                if(bcrypt.compareSync(req.body.password, data.password)){
+                    req.session.username = req.body.username;
+                    req.session.idUser = data.id;
+                    req.session.isLogin = true;
+                    res.redirect('/course');
+                }else{
+                    throw new Error('Login Failed!')
+                }
             }else{
                 throw new Error('Login Failed!')
             }
         })
-        .catch(err => res.send(err.message))
+        .catch(err => res.redirect('/login?error='+err.message))
     }
 
     static logout(req,res){
         req.session.destroy(function(err) {
-            // cannot access session here
             if(err){
                 res.send(err);
             }
@@ -45,113 +63,51 @@ class UserController {
         res.redirect('/');
         
     }
-    //CREATE USER
-    static create(obj) {
-        User.create({
-            username: obj.name,
-            password: obj.password,
-            email: obj.email
-        })
-        .then(created => {
-            console.log(created)
-        })
-        .catch(err => {
-            console.log(err)
-        })
-    }
 
-    static update() {
-        User.update({
-            balance: 100000
-        },{
-            where: {
-                id: 2
-            }
-        })
-        .then(updated => {
-            console.log(updated)
-        })
-        .catch(err => {
-            throw err;
-        })
-    }
-
-    static findAll() {
-        User.findAll({
-            attributes: {
-                exclude: EXCLUDE
-            }
-        })
-        .then(users => {
-            let arrayOfUsers = users.map((el) => { return el.dataValues}); //OUTPUT
-        })
-        .catch(err => {
-            throw err;
-        })
-    }
-
-    static findOne() {
+    static loadUser(req,res){
         User.findOne({
             where: {
-                id: 1
+                id: req.session.idUser,
             },
-            attributes: {
-                exclude: EXCLUDE
-            }
+            include: [{
+                model:UserCourse,
+                include: [{
+                    model: Course
+                }]
+            }]
         })
-        .then(found => {
-            let userFound = found.dataValues;
-        })
-        .catch(err => {
-            throw err;
-        })
-    }
-
-    static topUp(code, id) {
-        Voucher.findOne({
-            where: {
-                code: code,
-                status: false
-            }
-        })
-        .then(result => {
-            if(result) {
-                return User.findOne({
-                    where: {
-                        id: id
-                    }
-                })
-            }
-            else {
-                throw new Error('Voucher telah pernah digunakan')
-            }
-        })
-        .then(res => {
-            let userBalance = res.dataValues.balance
-            userBalance += 100000;
-            return User.update({
-                balance: userBalance
-            },{
-                where: {
-                    id: id
-                }
+        .then(data => {
+            res.render('./user',{
+                user:data,
+                moment,
+                error: req.query.error,
+                success: req.query.success
             })
         })
-        .then(updated => {
-            console.log("BERHASIL")
-        })
-        .catch(err => {
-            console.log(err)
-        })
+        .catch(err => res.send(err.message))
     }
+    static editUser(req,res){
+        let obj = {
+            email: req.body.email
+        }
+        if(req.body.password){
+            let salt = bcrypt.genSaltSync(10);
+            let hash = bcrypt.hashSync(req.body.password, salt);
+            obj.password = hash;
+        }
+        User.update(obj,{
+            where: {
+                id: req.session.idUser
+            }
+        })
+        .then((data) => {
+            if(data) res.redirect('/user?success='+'Successfully Update Profile');
+            else throw new Error('Something wrong happen')
+        })
+        .catch(err => res.redirect('/user?error='+err.message))
+    }
+
 }
 
-// UserController.create({
-//     name: 'Arya',
-//     password: 'arya123',
-//     email: 'arya1@gmail.com'
-// })
-
-// UserController.findOne()
 
 module.exports = UserController
