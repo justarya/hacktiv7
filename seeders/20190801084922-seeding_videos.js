@@ -10,27 +10,62 @@ module.exports = {
       */
     return queryInterface.bulkInsert('Videos', [
       {
-        CourseId:4,
-        urlVideo:'https://www.youtube.com/embed/0p0JLFZj2C8',
+        CourseId:1,
+        urlVideo:'https://www.youtube.com/embed/rfscVS0vtbw',
         name: 'Introduction',
         order: 1,
         createdAt: new Date(),
         updatedAt: new Date()
       },{
-        CourseId:4,
-        urlVideo:'https://www.youtube.com/embed/GcFJjpMFJvI',
+        CourseId:1,
+        urlVideo:'https://www.youtube.com/embed/8DvywoWv6fI',
         name: 'Immersive',
         order: 2,
         createdAt: new Date(),
         updatedAt: new Date()
       },{
-        CourseId:4,
-        urlVideo:'https://www.youtube.com/embed/GhQdlIFylQ8',
+        CourseId:1,
+        urlVideo:'https://www.youtube.com/embed/W8KRzm-HUcc',
         name: 'Final',
         order: 3,
         createdAt: new Date(),
         updatedAt: new Date()
-      },
+      },{
+        CourseId:2,
+        urlVideo:'https://www.youtube.com/embed/W6NZfCO5SIk',
+        name: 'Introduction',
+        order: 1,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },{
+        CourseId:2,
+        urlVideo:'https://www.youtube.com/embed/Mus_vwhTCq0',
+        name: 'Immersive',
+        order: 2,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },{
+        CourseId:3,
+        urlVideo:'https://www.youtube.com/embed/t_ispmWmdjY',
+        name: 'Introduction',
+        order: 1,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },{
+        CourseId:3,
+        urlVideo:'https://www.youtube.com/embed/Dji9ALCgfpM',
+        name: 'Immersive',
+        order: 2,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },{
+        CourseId:3,
+        urlVideo:'https://www.youtube.com/embed/pPy0GQJLZUM',
+        name: 'Final',
+        order: 3,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      }
     ], {});
     },
 
