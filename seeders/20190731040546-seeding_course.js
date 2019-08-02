@@ -10,6 +10,7 @@ module.exports = {
       */
     return queryInterface.bulkInsert('Courses', [
       {
+        id: 1,
         courseName: 'Python Programming',
         description: 'Python is for fun! ',
         price: 15000,
@@ -19,6 +20,7 @@ module.exports = {
         updatedAt: new Date()
       },
       {
+        id: 2,
         courseName: 'Javascript Programing',
         description: 'Javascript for better future',
         price: 15000,
@@ -28,6 +30,7 @@ module.exports = {
         updatedAt: new Date()
       },
       {
+        id: 3,
         courseName: 'Ruby Programing',
         description: 'Ruby for newbie',
         price: 15000,
@@ -37,6 +40,7 @@ module.exports = {
         updatedAt: new Date()
       },
       {
+        id: 4,
         courseName: 'C# Programing',
         description: 'C# for legend',
         price: 15000,
