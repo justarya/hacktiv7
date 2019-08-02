@@ -1,6 +1,6 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
-    const generateHASH = require('../helper/HASH')
+    const Op = sequelize.Sequelize.Op
     const Model = sequelize.Sequelize.Model
     class User extends Model {
     }
@@ -11,7 +11,10 @@ module.exports = (sequelize, DataTypes) => {
                 isUnique: function(value) {
                     return User.findOne({
                         where: {
-                            username: value
+                            username: value,
+                            id: {
+                                [Op.ne]: this.id
+                            }
                         }
                     })
                     .then(result => {
@@ -37,7 +40,10 @@ module.exports = (sequelize, DataTypes) => {
                 isUnique: function(value) {
                     return User.findOne({
                         where: {
-                            email: value
+                            email: value,
+                            id: {
+                                [Op.ne] : this.id
+                            }
                         }
                     })
                     .then(result => {
@@ -55,14 +61,8 @@ module.exports = (sequelize, DataTypes) => {
     },{
         sequelize
     })
-    User.addHook('beforeCreate', 'hashPassword', (user, options) => {
-        const bcrypt = require('bcryptjs');
-        let salt = bcrypt.genSaltSync(10);
-        let hash = bcrypt.hashSync(user.password, salt);
-        user.password = hash;
-    })
     User.addHook('beforeCreate', 'generateBalance' , (user, options) => {
-        user.balance = 10000
+        user.balance = 100000
     })
   User.associate = function(models) {
     // associations can be defined here

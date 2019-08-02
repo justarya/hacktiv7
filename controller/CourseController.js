@@ -16,7 +16,6 @@ class CourseController {
         })
         .then((data) => {
             let arrayOfcourse = data.map((el) => { return el.dataValues});
-            console.log(arrayOfcourse)
             res.render('./course',{courses:arrayOfcourse,formatUang});
         })
     }
@@ -47,8 +46,6 @@ class CourseController {
         })
     }
 
-
-
     static loadVideo(req, res) {
         Course.findOne({
             where: {
@@ -69,7 +66,6 @@ class CourseController {
             res.render('./course/video', {course,video})
         })
     }
-
 
 
     // CREATE COURSE
@@ -108,7 +104,7 @@ class CourseController {
         let obj = {}
         Course.findOne({
             where: {
-                id: req.params.id//COURSE ID
+                id: req.params.id
             },
             attributes: {
                 exclude: EXCLUDE
@@ -119,7 +115,7 @@ class CourseController {
             obj.courseLength = result.dataValues.durationExpired
             return User.findOne({
                 where:{
-                    id: req.session.idUser//USER ID
+                    id: req.session.idUser
                 },
                 attributes: {
                     exclude: EXCLUDE
@@ -133,7 +129,7 @@ class CourseController {
                     balance: userBalance - obj.coursePrice
                 }, {
                     where: {
-                        id: req.session.idUser //id USER
+                        id: req.session.idUser 
                     }
                 })
                 .then(updated => {
@@ -153,7 +149,7 @@ class CourseController {
                 })
             }
             else {
-                console.log("KURANG")
+                console.log("KURANG") // UANG KURANG
             }
         })
         .catch(err => {

@@ -1,6 +1,7 @@
 const User = require('../models').User
 const EXCLUDE = ['createdAt','updatedAt','password','salt']; //FOR EXCLUDE PROPERTY
 const bcrypt = require('bcryptjs');
+const Voucher = require('../models').Voucher
 
 class UserController {
     static register(req,res){
@@ -106,6 +107,43 @@ class UserController {
         })
     }
 
+    static topUp(code, id) {
+        Voucher.findOne({
+            where: {
+                code: code,
+                status: false
+            }
+        })
+        .then(result => {
+            if(result) {
+                return User.findOne({
+                    where: {
+                        id: id
+                    }
+                })
+            }
+            else {
+                throw new Error('Voucher telah pernah digunakan')
+            }
+        })
+        .then(res => {
+            let userBalance = res.dataValues.balance
+            userBalance += 100000;
+            return User.update({
+                balance: userBalance
+            },{
+                where: {
+                    id: id
+                }
+            })
+        })
+        .then(updated => {
+            console.log("BERHASIL")
+        })
+        .catch(err => {
+            console.log(err)
+        })
+    }
 }
 
 // UserController.create({
